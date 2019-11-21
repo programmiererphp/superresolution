@@ -66,7 +66,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "superresolution/superresolution_upload_image.py",
-        "code": "import logging\nimport os\n\nfrom flask import Flask, request\nfrom google.cloud import storage\nimport flask\nimport werkzeug.datastructures\n\n\napp = flask.Flask(__name__)\ndef superresolution_upload_image(request):\n    with app.app_context():\n        headers = werkzeug.datastructures.Headers()\n        for key, value in request.headers.items():\n            headers.add(key, value)\n        with app.test_request_context(method=request.method, base_url=request.base_url, path=request.path, query_string=request.query_string, headers=headers, data=request.data):\n            try:\n                rv = app.preprocess_request()\n                if rv is None:\n                    rv = app.dispatch_request()\n            except Exception as e:\n                rv = app.handle_user_exception(e)\n            response = app.make_response(rv)\n            return app.process_response(response)\n        \n        \napp = Flask(__name__)\n\n# Configure this environment variable via app.yaml\nCLOUD_STORAGE_BUCKET = \"superresolution_bucket_out\"\n#os.environ['CLOUD_STORAGE_BUCKET']\n\n@app.route('/')\ndef index():\n    return \"\"\"\n<form method=\"POST\" action=\"/superres_upload\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"file\">\n    <input type=\"submit\">\n</form>\n\"\"\"\ndef handler(request, response):\n    \n    response.send({\"message\": \"Successfully executed\"})\n",
+        "code": "import logging\nimport os\n\nfrom flask import Flask, request\nfrom google.cloud import storage\nimport flask\nimport werkzeug.datastructures\n\n\napp = flask.Flask(__name__)\ndef superresolution_upload_image(request):\n    with app.app_context():\n        headers = werkzeug.datastructures.Headers()\n        for key, value in request.headers.items():\n            headers.add(key, value)\n        with app.test_request_context(method=request.method, base_url=request.base_url, path=request.path, query_string=request.query_string, headers=headers, data=request.data):\n            try:\n                rv = app.preprocess_request()\n                if rv is None:\n                    rv = app.dispatch_request()\n            except Exception as e:\n                rv = app.handle_user_exception(e)\n            response = app.make_response(rv)\n            return app.process_response(response)\n        \n        \napp = Flask(__name__)\n\n# Configure this environment variable via app.yaml\nCLOUD_STORAGE_BUCKET = \"superresolution_bucket_out\"\n#os.environ['CLOUD_STORAGE_BUCKET']\n\n@app.route('/')\ndef index():\n    return \"\"\"\n<form method=\"POST\" action=\"/superres_upload\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"file\">\n    <input type=\"submit\">\n</form>\n\"\"\"\ndef handler(request, response):\n        return \"\"\"\n<form method=\"POST\" action=\"/superres_upload\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"file\">\n    <input type=\"submit\">\n</form>\n\"\"\"\n    response.send({\"message\": \"Successfully executed\"})\n",
         "config": {
           "runtime": "python3.6",
           "timeout": 60,
@@ -78,7 +78,15 @@
             "resourceName": "http-trigger",
             "config": {}
           }
-        ]
+        ],
+        "testCases": {
+          "fb112028-e247-438c-a8f4-0f4685121025": {
+            "id": "fb112028-e247-438c-a8f4-0f4685121025",
+            "name": "Unnamed event",
+            "functionId": "90fc005b-0003-4124-aeaf-d852ff7a7451",
+            "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}\n"
+          }
+        }
       },
       "61b797c7-3ec9-42f2-8001-8c046e251873": {
         "id": "61b797c7-3ec9-42f2-8001-8c046e251873",
@@ -131,7 +139,7 @@
     "projectRegion": "europe-west1",
     "platform": "GCP",
     "platformRegions": {},
-    "lastSave": 1574333424628
+    "lastSave": 1574334182099
   },
   "VCS_STATE": {
     "provider": "GitHub",

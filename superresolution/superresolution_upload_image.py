@@ -39,5 +39,10 @@ def index():
 </form>
 """
 def handler(request, response):
-    
+        return """
+<form method="POST" action="/superres_upload" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit">
+</form>
+"""
     response.send({"message": "Successfully executed"})
