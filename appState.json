@@ -8,7 +8,9 @@
         "type": "DIRECTORY",
         "isDirectory": true,
         "children": [
-          "d427af0f-55bf-4cab-8058-f40cbf1a3449"
+          "d427af0f-55bf-4cab-8058-f40cbf1a3449",
+          "90fc005b-0003-4124-aeaf-d852ff7a7451",
+          "61b797c7-3ec9-42f2-8001-8c046e251873"
         ],
         "isRemovable": false,
         "filePath": "superresolution"
@@ -53,15 +55,50 @@
         "children": [],
         "isRemovable": false,
         "filePath": "index.js",
-        "code": "// This file is used to register all your cloud functions in GCP.\n// DO NOT EDIT/DELETE THIS, UNLESS YOU KNOW WHAT YOU ARE DOING.\n\nexports.superresolutionfunction = require(\"./superresolution/function.js\").handler;"
+        "code": "// This file is used to register all your cloud functions in GCP.\n// DO NOT EDIT/DELETE THIS, UNLESS YOU KNOW WHAT YOU ARE DOING.\n\nexports.superresolutionfunction = require(\"./superresolution/function.js\").handler;\nexports.superresolutionsuperresolutionuploadimage = require(\"./superresolution/superresolution_upload_image.py\").handler;"
+      },
+      "90fc005b-0003-4124-aeaf-d852ff7a7451": {
+        "id": "90fc005b-0003-4124-aeaf-d852ff7a7451",
+        "parent": "064b099d-3fa5-42d3-8901-62624813a290",
+        "name": "superresolution_upload_image.py",
+        "type": "PYTHON_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "superresolution/superresolution_upload_image.py",
+        "code": "import logging\nimport os\n\nfrom flask import Flask, request\nfrom google.cloud import storage\nimport flask\nimport werkzeug.datastructures\n\n\napp = flask.Flask(__name__)\ndef superresolution_upload_image(request):\n    with app.app_context():\n        headers = werkzeug.datastructures.Headers()\n        for key, value in request.headers.items():\n            headers.add(key, value)\n        with app.test_request_context(method=request.method, base_url=request.base_url, path=request.path, query_string=request.query_string, headers=headers, data=request.data):\n            try:\n                rv = app.preprocess_request()\n                if rv is None:\n                    rv = app.dispatch_request()\n            except Exception as e:\n                rv = app.handle_user_exception(e)\n            response = app.make_response(rv)\n            return app.process_response(response)\n        \n        \napp = Flask(__name__)\n\n# Configure this environment variable via app.yaml\nCLOUD_STORAGE_BUCKET = \"superresolution_bucket_out\"\n#os.environ['CLOUD_STORAGE_BUCKET']\n\n@app.route('/')\ndef index():\n    return \"\"\"\n<form method=\"POST\" action=\"/superres_upload\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"file\">\n    <input type=\"submit\">\n</form>\n\"\"\"\ndef handler(request, response):\n    \n    response.send({\"message\": \"Successfully executed\"})\n",
+        "config": {
+          "runtime": "python3.6",
+          "timeout": 60,
+          "memory": 128,
+          "triggerType": 0
+        },
+        "triggers": [
+          {
+            "resourceName": "http-trigger",
+            "config": {}
+          }
+        ]
+      },
+      "61b797c7-3ec9-42f2-8001-8c046e251873": {
+        "id": "61b797c7-3ec9-42f2-8001-8c046e251873",
+        "parent": "064b099d-3fa5-42d3-8901-62624813a290",
+        "name": "__init__.py",
+        "type": "PYTHON_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "superresolution/__init__.py",
+        "code": ""
       }
     },
     "deletedFiles": [],
     "rootNode": "064b099d-3fa5-42d3-8901-62624813a290",
     "openFiles": [
-      "d427af0f-55bf-4cab-8058-f40cbf1a3449"
+      "d427af0f-55bf-4cab-8058-f40cbf1a3449",
+      "90fc005b-0003-4124-aeaf-d852ff7a7451"
     ],
-    "currentFileId": "d427af0f-55bf-4cab-8058-f40cbf1a3449",
+    "currentFileId": "90fc005b-0003-4124-aeaf-d852ff7a7451",
     "resources": {
       "http-trigger": {
         "name": "http-trigger",
@@ -73,7 +110,16 @@
       "dialect": null,
       "definitions": {}
     },
-    "envVariables": [],
+    "envVariables": [
+      {
+        "lambdaId": "90fc005b-0003-4124-aeaf-d852ff7a7451",
+        "varKey": "PYTHONPATH",
+        "varValue": "/var/runtime:/var/task/superresolution",
+        "shouldPersist": true,
+        "displayOnly": false,
+        "editable": true
+      }
+    ],
     "packageJSON": {
       "dependencies": {}
     }
@@ -85,7 +131,7 @@
     "projectRegion": "europe-west1",
     "platform": "GCP",
     "platformRegions": {},
-    "lastSave": 1574332088817
+    "lastSave": 1574333424628
   },
   "VCS_STATE": {
     "provider": "GitHub",
